@@ -9,6 +9,7 @@ namespace ReviewASP.Controllers
 {
     public class BrandsController : Controller
     {
+        //这个IActionResult是属于interface
         public IActionResult Index()
         {
             //use the brand model to create a mock list of brand objects to display on the Index view
@@ -28,7 +29,21 @@ namespace ReviewASP.Controllers
         //get: Brands/Details
         public IActionResult Details(string name) {
             //read the name param from the url, and put it in the ViewBag for display on the view
+            if (name == null)
+            {
+                //没有name的话，就返回400
+                return BadRequest();
+
+             }
             ViewBag.name = name;
+            return View();
+        }
+
+        //get:Brands/create。 
+
+        public IActionResult Create() {
+
+            
             return View();
         }
     }
