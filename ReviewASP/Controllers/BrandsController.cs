@@ -31,7 +31,7 @@ namespace ReviewASP.Controllers
             //read the name param from the url, and put it in the ViewBag for display on the view
             if (name == null)
             {
-                //没有name的话，就返回400
+                //没有name的话，就返回400,也是一种return的类型，可以return code of http
                 return BadRequest();
 
              }
@@ -39,11 +39,12 @@ namespace ReviewASP.Controllers
             return View();
         }
 
-        //get:Brands/create。 
+        //get:Brands/create
 
         public IActionResult Create() {
 
-            
+            //我们可以return 4 种类型，1.默认类型是view，2.也可以return json（如果我们建立一个api），
+            //3.也可以return 一个http status code比方404.4种就是redirect，我们可以redirectToAction
             return View();
         }
     }
