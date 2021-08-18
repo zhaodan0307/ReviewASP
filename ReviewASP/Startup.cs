@@ -29,11 +29,28 @@ namespace ReviewASP
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")));//
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //在这里证明我们需要 authentication,暂时这里变成false，不然的话，真的会需要验证email，而我们在这里为了方便不去验证email
+            //add the default role mechanism
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            //external google的使用、、如果是使用了google，那么回到database去看，就会发现这个user没有密码
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = Configuration.GetSection("Authentication:Google")["ClientId"];
+                    options.ClientSecret = Configuration.GetSection("Authentication:Google")["ClientSecret"];
+                });
+            //允许系统用 session
+            services.AddSession();
+
+            //google使用结束， json里面加入了google id，和secret信息
+
             services.AddControllersWithViews();
         }
 
@@ -56,8 +73,11 @@ namespace ReviewASP
 
             app.UseRouting();
 
+            //这里使用了authentication and authorization
             app.UseAuthentication();
             app.UseAuthorization();
+            //使用了session去store用户信息
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

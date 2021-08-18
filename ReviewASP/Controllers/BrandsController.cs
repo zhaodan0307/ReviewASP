@@ -1,51 +1,158 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ReviewASP.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using ReviewASP.Data;
+using ReviewASP.Models;
 
 namespace ReviewASP.Controllers
 {
+    [Authorize(Roles ="Administrator")]
     public class BrandsController : Controller
     {
-        //这个IActionResult是属于interface
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        //链接database
+        public BrandsController(ApplicationDbContext context)
         {
-            //use the brand model to create a mock list of brand objects to display on the Index view
-
-            var brands = new List<Brand>();
-
-            brands.Add(new Brand { Id = 100, Name = "Canadian Club", YearFounded = 1902 });
-            brands.Add(new Brand { Id = 101, Name = "Moison", YearFounded = 1786 });
-            brands.Add(new Brand { Id = 102, Name = "Glenfiddich", YearFounded = 1883 });
-            brands.Add(new Brand { Id = 103, Name = "JP Wiser", YearFounded = 1853 });
-            brands.Add(new Brand { Id = 104, Name = "Jackson Triggs", YearFounded = 1993 });
-
-            //pass the brands list to the view for display
-            return View(brands);
+            _context = context;
         }
 
-        //get: Brands/Details
-        public IActionResult Details(string name) {
-            //read the name param from the url, and put it in the ViewBag for display on the view
-            if (name == null)
+        // GET: Brands
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Brands.ToListAsync());
+        }
+
+        // GET: Brands/Details/5
+        //这个允许所有的人都access Brands/Details/
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
             {
-                //没有name的话，就返回400,也是一种return的类型，可以return code of http
-                return BadRequest();
+                return NotFound();
+            }
 
-             }
-            ViewBag.name = name;
+            var brand = await _context.Brands
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (brand == null)
+            {
+                return NotFound();
+            }
+
+            return View(brand);
+        }
+
+        // GET: Brands/Create
+        public IActionResult Create()
+        {
             return View();
         }
 
-        //get:Brands/create
+        // POST: Brands/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Name,YearFounded")] Brand brand)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(brand);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(brand);
+        }
 
-        public IActionResult Create() {
+        // GET: Brands/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            //我们可以return 4 种类型，1.默认类型是view，2.也可以return json（如果我们建立一个api），
-            //3.也可以return 一个http status code比方404.4种就是redirect，我们可以redirectToAction
-            return View();
+            var brand = await _context.Brands.FindAsync(id);
+            if (brand == null)
+            {
+                return NotFound();
+            }
+            return View(brand);
+        }
+
+        // POST: Brands/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,YearFounded")] Brand brand)
+        {
+            if (id != brand.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(brand);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BrandExists(brand.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(brand);
+        }
+
+        // GET: Brands/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var brand = await _context.Brands
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (brand == null)
+            {
+                return NotFound();
+            }
+
+            return View(brand);
+        }
+
+        // POST: Brands/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var brand = await _context.Brands.FindAsync(id);
+            _context.Brands.Remove(brand);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool BrandExists(int id)
+        {
+            return _context.Brands.Any(e => e.Id == id);
         }
     }
 }

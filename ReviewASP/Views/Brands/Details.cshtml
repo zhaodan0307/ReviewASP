@@ -1,18 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ReviewASP.Models.Brand
+
 @{
-}
-<h1>Brand Info</h1>
-
-@if (ViewBag.name != null)
-{
-    <h2>@ViewBag.name</h2>
-
-}
-else { 
-    //回归自己的页面
-    <a asp-controller="Brands" asp-action="index">Click it</a>
-
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h1>Details</h1>
+
+<div>
+    <h4>Brand</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.YearFounded)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.YearFounded)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

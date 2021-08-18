@@ -3,30 +3,68 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ReviewASP</title>
+    <title>@ViewData["Title"] - DotNetDrinks</title>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ReviewASP</a>
+                <a class="navbar-brand " asp-area="" asp-controller="Home" asp-action="Index">
+                    <img class="img-thumbnail" src="~/img/dotnetdrinks-logo.jpg" alt="DotNet Drinks" />
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <!--这里限定了，如果是没有登录的话，看不到这些的因素-->
+                        @*@if (User.Identity.IsAuthenticated)*@
+
+                        @*在这里，只有user为administor可以看到这些*@
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Store" asp-action="Cart">
+                                <span class="material-icons align-top">
+                                    shopping_cart
+                                </span>
+                            </a>
                         </li>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Brands" asp-action="Index">Brands</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Categories" asp-action="Index">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Products" asp-action="Index">Products</a>
+                            </li>
+
+                        }
+
+
+
+
+
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-controller="Store" asp-action="Index">Store</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Brands" asp-action="Index">Brands</a>
+                            <a class="nav-link text-dark" asp-controller="Orders" asp-action="Index">Orders</a>
                         </li>
+
+                        
+
+
 
                     </ul>
                     <partial name="_LoginPartial" />
@@ -42,12 +80,14 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - ReviewASP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - DotNetDrinks - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> - <a href="https://github.com/ifotn/DotNetDrinks" target="_blank">View Source on GitHub</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- table sorting script from https://kryogenix.org/code/browser/sorttable/ -->
+    <script src="~/js/sorttable.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

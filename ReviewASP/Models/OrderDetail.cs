@@ -10,19 +10,22 @@ namespace ReviewASP.Models
         //junction between Order and Product (many-to-many)
         public int Id { get; set; }
 
-        //foreign key
+        //foreign key 两个
         public int ProductId { get; set; }
 
         public int OrderId { get; set; }
-
-
-        public int Quantity { get; set; }
-
-        public decimal Price { get; set; }
 
         //navigation virtual properties
 
         public Product Product { get; set; }
         public Order Order { get; set; }
+
+        //剩下的……
+
+        public int Quantity { get; set; }
+
+        public decimal Price { get; set; }
+
+        
     }
 }

@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!--Enumerable means this page is receiving a list that we can iterate though we can loop through of this type of data -->
+@model IEnumerable<ReviewASP.Models.Brand>
+
+<h1>Our Brands</h1>
+
+<ul>
+    @foreach (var b in Model) { 
+        
+        <li><a asp-controller="Brands" asp-action="Details" asp-route-name="@b.Name"> @b.Name</a>
+         (@b.YearFounded)
+        </li>
+    
+    
+    }
+
+
+    <!--comment -->
+    @* <li>
+            <!--在这里，asp-controller是现在的页面，属于哪个controller，然而asp-action是需要一个叫做details的method，回BrandsController里面加一个method-->
+            <!--asp-route-name是append to /Brands/Details?name=Candian Club, name is the parameter-->
+            <a asp-controller="Brands" asp-action="Details" asp-route-name="Candian Club">Canadian Club</a>
+        </li>
+        <li><a asp-controller="Brands" asp-action="Details" asp-route-name="Molson">Molson</a></li>
+        <li><a asp-controller="Brands" asp-action="Details" asp-route-name="Glenfiddich">Glenfiddich</a></li>
+
+        <li><a asp-controller="Brands" asp-action="Details" asp-route-name="JP Wiser">JP Wiser</a></li>
+        <li><a asp-controller="Brands" asp-action="Details" asp-route-name="Jackson Triggs">Jackson Triggs</a></li>*@
+
+
+</ul>

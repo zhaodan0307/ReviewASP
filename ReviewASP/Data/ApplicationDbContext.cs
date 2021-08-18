@@ -9,7 +9,7 @@ namespace ReviewASP.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        //declare all the  models so the ab can work with it and so can the rest of our app
+        //declare all the  models so the db can work with it and so can the rest of our app
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }

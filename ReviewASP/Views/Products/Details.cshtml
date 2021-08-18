@@ -1,0 +1,73 @@
+﻿@model ReviewASP.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Product Details</h1>
+
+<div>
+    
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Stock)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class = "col-sm-10">
+            @if (!String.IsNullOrEmpty(Model.Image)) 
+            { 
+               <img src="~/img/products/@Model.Image" alt="Logo for @Model.Name" class="img-thumbnail" />
+            }
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Brand)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Brand.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+    </dl>
+</div>
+
+@*Add to Cart*@
+
+
+<form method="post" action="/Store/AddToCart">
+    <input id="ProductId" name="ProductId" value="@Model.Id" type="hidden" />
+    <div class="form-group">
+        <label class="form-control" for="Quantity"> Quantity </label>
+        <input id="Quantity" name="Quantity" required type="number" min="1" max="999" />
+    </div>
+    <button class="btn btn-primary">Add</button>
+
+</form>
+
+
+
+@*Go back to browse page 回到上一个页面*@
+
+<a href="javascript:history.go(-1)"> Go back to Browse</a>

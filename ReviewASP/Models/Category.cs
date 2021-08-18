@@ -14,6 +14,7 @@ namespace ReviewASP.Models
 
 
         //navigaton property to child Product objects
+        //一个categary 可以对应多个product，所以使用List  
 
         public List<Product> Products { get; set; }
 
